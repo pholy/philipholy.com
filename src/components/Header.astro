@@ -1,0 +1,232 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header id="main-header">
+	<nav>
+		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<button class="hamburger" aria-label="Toggle navigation">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+		<div class="internal-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<!--<HeaderLink href="/articles">Articles</HeaderLink>-->
+			<!--<HeaderLink href="/about">About</HeaderLink>-->
+			<HeaderLink href="/contact">Contact</HeaderLink>
+		</div>
+	</nav>
+</header>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const header = document.getElementById('main-header');
+		const hamburger = document.querySelector('.hamburger');
+		const nav = document.querySelector('nav');
+		
+		function handleScroll() {
+			if (window.scrollY > 0) {
+			    if (header)	header.classList.add('scrolled');
+			} else {
+				if (header) header.classList.remove('scrolled');
+			}
+		}
+		
+		function toggleMenu() {
+			if (nav) nav.classList.toggle('menu-open');
+			if (hamburger) hamburger.classList.toggle('active');
+		}
+		
+		if (hamburger) {
+			hamburger.addEventListener('click', toggleMenu);
+		}
+		
+		window.addEventListener('scroll', handleScroll);
+		
+		// Check initial scroll position
+		handleScroll();
+	});
+</script>
+
+<style>
+	header {
+		margin: 0;
+		padding: 0;
+		background: rgb(var(--gray-light));
+		border-bottom: 1px solid rgba(var(--gray-light), 50%);
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		transition: box-shadow 0.3s ease;
+	}
+	header.scrolled {
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 10%);
+	}
+	nav {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: 0 auto;
+		padding: 0 1em;
+	}
+	.internal-links {
+		margin-left: auto;
+	}
+
+	/* Prevent flash on mobile - hide menu by default on small screens */
+	@media (max-width: 768px) {
+		.internal-links {
+			display: none;
+		}
+		
+		nav.menu-open .internal-links {
+			display: flex;
+		}
+	}
+	h2 {
+		margin: 0;
+		font-size: 1em;
+	}
+
+	h2 a,
+	h2 a.active {
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	nav a {
+		padding: 1em 0.5em;
+		color: rgb(var(--gray-dark));
+		border-bottom: 4px solid transparent;
+		text-decoration: none;
+		transition: color 0.2s ease, border-bottom-color 0.2s ease;
+	}
+	nav a:hover {
+		color: rgb(var(--black));
+	}
+	nav a.active {
+		text-decoration: none;
+		//border-bottom-color: var(--accent);
+		color: rgb(var(--black));
+	}
+
+	/* Hamburger menu styles */
+	.hamburger {
+		display: none;
+		flex-direction: column;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.5em;
+		width: 30px;
+		height: 30px;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.hamburger span {
+		width: 100%;
+		height: 3px;
+		background-color: rgb(var(--gray-dark));
+		transition: transform 0.3s ease, opacity 0.3s ease;
+		transform-origin: center;
+	}
+
+	.hamburger.active span:nth-child(1) {
+		transform: rotate(45deg);
+		position: absolute;
+		width: 20px;
+	}
+
+	.hamburger.active span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.hamburger.active span:nth-child(3) {
+		transform: rotate(-45deg);
+		position: absolute;
+		width: 20px;
+	}
+
+	@media (max-width: 1200px) {
+		nav {
+			padding: 0 1em;
+		}
+	}
+	
+	/* Tablet and mobile styles */
+	@media (max-width: 768px) {
+		.hamburger {
+			display: flex;
+		}
+
+		nav {
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			padding: 1em;
+			position: relative;
+		}
+		
+		.internal-links {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: rgb(var(--gray-light));
+			border-top: 1px solid rgba(var(--gray-light), 50%);
+			flex-direction: column;
+			align-items: stretch;
+			margin-left: 0;
+			width: auto;
+			transform: translateY(-100%);
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.3s ease;
+			z-index: 1000;
+		}
+
+		nav.menu-open .internal-links {
+			transform: translateY(0);
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.internal-links a {
+			padding: 1em;
+			border-bottom: 1px solid rgba(var(--gray), 20%);
+			text-align: center;
+		}
+
+		.internal-links a:last-child {
+			border-bottom: none;
+		}
+		
+		h2 {
+			font-size: 1.2em;
+		}
+	}
+	
+	@media (max-width: 480px) {
+		nav {
+			padding: 0.75em;
+		}
+		
+		nav a {
+			padding: 0.75em 0.25em;
+			font-size: 0.9em;
+		}
+		
+		h2 {
+			font-size: 1.1em;
+		}
+		
+		h2 a {
+			padding: 0.5em 0;
+		}
+	}
+</style>
