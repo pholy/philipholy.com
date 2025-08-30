@@ -8,12 +8,16 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://philipholy.com',
-  integrations: [mdx(), sitemap()],
+    site: 'https://philipholy.com',
+    integrations: [mdx(), sitemap()],
 
-  redirects: {
-      "/articles": "/",
-  },
+    // https://docs.astro.build/en/guides/routing/#configured-redirects
+    redirects: {
+        "/articles": "/",
+    },
 
-  adapter: cloudflare()
+    // https://docs.astro.build/en/guides/prefetch/
+    prefetch: true,
+
+    adapter: cloudflare()
 });
